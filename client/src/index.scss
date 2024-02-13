@@ -1,0 +1,14 @@
+@import "./scss/variables";
+@import "./scss/mixins";
+
+* {
+  @include all;
+}
+
+:root {
+  @include root;
+}
+
+body {
+  @include body;
+}
