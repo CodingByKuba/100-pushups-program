@@ -14,10 +14,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(router.accountRouter);
 
 const mongoose = require("mongoose");
+const models = require("./models");
 
 mongoose.connect(process.env.DB_HOST);
 
-mongoose.connection.on("connected", () => console.log("Connected to database"));
+mongoose.connection.on("connected", async () => {
+  console.log("Connected to database...");
+  const time = new Date(new Date() - process.env.TOKEN_EXPIRES || 86400000);
+  console.time("Cleared old revoked tokens");
+  await models.RevokedToken.deleteMany({ createdAt: { $lte: time } });
+  console.timeEnd("Cleared old revoked tokens");
+});
 mongoose.connection.on("error", (error) =>
   console.log("Database connection error: ", error)
 );

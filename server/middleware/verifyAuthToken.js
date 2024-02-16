@@ -1,13 +1,23 @@
 const jwt = require("jsonwebtoken");
+const models = require("../models");
+const errors = require("../data/errors");
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   let authHeader = req.headers["authorization"];
   let token = authHeader && authHeader.split(" ")[1];
-  if (!token) return res.status(401).send({ error: "Authentication error" });
+  if (!token)
+    return res.status(401).send({ error: errors.AUTHENTICATION_ERROR });
+
+  let searchTokenInRevoked = await models.RevokedToken.findOne({
+    authToken: authHeader,
+  });
+  if (searchTokenInRevoked)
+    return res.status(401).send({ error: errors.AUTHENTICATION_ERROR });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).send({ error: "Authentication error" });
-    req.user = user;
+    if (err)
+      return res.status(403).send({ error: errors.AUTHENTICATION_ERROR });
+    req.body.user = user;
     next();
   });
 };

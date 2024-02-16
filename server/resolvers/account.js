@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const models = require("../models");
+const jwt = require("jsonwebtoken");
 const errors = require("../data/errors");
 
 const signIn = async (props) => {
@@ -17,6 +18,7 @@ const signIn = async (props) => {
       props.password,
       findUser.password
     );
+
     if (comparedPassword) {
       let accessToken = jwt.sign(
         { email: props.email },
@@ -60,7 +62,32 @@ const createAccount = async (props) => {
   }
 };
 
+const refreshToken = async (props) => {
+  try {
+    if (!props.token || typeof props.token !== "string")
+      throw errors.TOKEN_REQUIRED;
+    await models.RevokedToken.create({
+      authToken: props.token,
+    });
+
+    let accessToken = jwt.sign(
+      { email: props.user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    return {
+      token: accessToken,
+    };
+  } catch (error) {
+    return { error: error };
+  }
+};
+
 module.exports = {
   signIn,
   createAccount,
+  refreshToken,
 };
