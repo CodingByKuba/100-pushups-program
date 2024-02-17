@@ -19,6 +19,12 @@ const accountSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    currentStage: {
+      type: String,
+    },
+    seriesLock: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
