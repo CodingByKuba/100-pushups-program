@@ -8,7 +8,7 @@ const createStage = async (props) => {
 
     if (!email) throw errors.EMAIL_REQUIRED;
 
-    let findUser = await models.Account.findOne({ email: props.email });
+    let findUser = await models.Account.findOne({ email: email });
     if (!findUser) throw errors.EMAIL_NOT_FOUND;
 
     if (findUser.currentStage) throw errors.STAGE_STARTED;
@@ -52,13 +52,16 @@ const deleteStage = async (props) => {
 
     if (!email) throw errors.EMAIL_REQUIRED;
 
-    let findUser = await models.Account.findOne({ email: props.email });
+    let findUser = await models.Account.findOne({ email: email });
     if (!findUser) throw errors.EMAIL_NOT_FOUND;
 
     if (!props?.stageId) throw errors.STAGE_ID_REQUIRED;
     let findStage = await models.Stage.findOne({ stageId: props.stageId });
 
     if (!findStage) throw errors.STAGE_NOT_FOUND;
+
+    if (String(findUser._id) !== String(findStage.accountId))
+      throw errors.AUTHENTICATION_ERROR;
 
     if (findUser.currentStage !== findStage.stageId)
       throw errors.STAGE_ID_INCORRECT;

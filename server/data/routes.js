@@ -3,4 +3,5 @@ module.exports = {
   ACCOUNT: "/account",
   TOKEN: "/token",
   STAGE: "/stage",
+  SERIES: "/series",
 };
