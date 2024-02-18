@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(router.accountRouter);
+app.use(router.stageRouter);
 
 const mongoose = require("mongoose");
 const models = require("./models");

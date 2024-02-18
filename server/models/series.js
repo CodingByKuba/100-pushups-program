@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const seriesSchema = new mongoose.Schema(
   {
-    accoundId: {
+    accountId: {
       type: String,
       required: true,
     },
@@ -12,6 +12,10 @@ const seriesSchema = new mongoose.Schema(
     },
     dedicatedForStage: {
       type: String,
+      required: true,
+    },
+    seriesIndex: {
+      type: Number,
       required: true,
     },
     seriesToMake: {

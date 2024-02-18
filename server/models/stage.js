@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const stageSchema = new mongoose.Schema(
   {
-    accoundId: {
+    accountId: {
       type: String,
       required: true,
     },
