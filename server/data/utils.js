@@ -23,7 +23,20 @@ const getSeriesArray = (userId, stageId, stageLevel) => {
   return seriesArray;
 };
 
+const countStageUnlocked = (pushups) => {
+  if (isNaN(pushups) || pushups < 0) return 0;
+  let advanceArray = [0, 6, 11, 21, 26, 31, 36, 41, 46, 51, 56, 61, 100];
+  let i = 0;
+  let newStage = 1;
+  while (i < pushups) {
+    i++;
+    if (advanceArray.includes(i)) newStage++;
+  }
+  return newStage;
+};
+
 module.exports = {
   generateRandomId,
   getSeriesArray,
+  countStageUnlocked,
 };

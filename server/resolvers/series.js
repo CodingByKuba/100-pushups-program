@@ -1,5 +1,6 @@
 const models = require("../models");
 const errors = require("../data/errors");
+const { countStageUnlocked } = require("../data/utils");
 
 const finishSeries = async (props) => {
   try {
@@ -60,11 +61,20 @@ const finishSeries = async (props) => {
     );
 
     let updatedStage = undefined;
+
     let filterSeries =
       findAllSeriesInStage.filter(
         (el) => el.seriesToMake.length !== el.seriesFinished.length
       ).length === 1;
-    let isTestNeeded = findStage.stageLevel && filterSeries > 0 ? true : false;
+
+    let isTestNeeded = findStage.stageLevel && filterSeries ? true : false;
+
+    let countNewStage = countStageUnlocked(props.seriesFinished[0]);
+    let newStageUnlocked =
+      findStage.stageLevel < 1 && countNewStage > findUser.stageUnlocked
+        ? countNewStage
+        : undefined;
+
     if (filterSeries) {
       updatedStage = await models.Stage.updateOne(
         { accountId: findUser._id, stageId: findSeries.dedicatedForStage },
@@ -73,7 +83,13 @@ const finishSeries = async (props) => {
       );
       await models.Account.updateOne(
         { email: email },
-        { currentStage: "", testNeeded: isTestNeeded },
+        {
+          currentStage: "",
+          testNeeded: isTestNeeded,
+          stageUnlocked: newStageUnlocked
+            ? newStageUnlocked
+            : findUser.stageUnlocked,
+        },
         { new: true }
       );
     }
@@ -85,6 +101,7 @@ const finishSeries = async (props) => {
       },
       finishedStage: updatedStage ? findStage.stageId : undefined,
       testNeeded: isTestNeeded,
+      stageUnlocked: newStageUnlocked,
     };
   } catch (error) {
     return { error: error };
