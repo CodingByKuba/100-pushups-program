@@ -17,6 +17,12 @@ const createStage = async (props) => {
     if (props.stageLevel > findUser.stageUnlocked)
       throw errors.STAGE_LEVEL_INCORRECT;
 
+    if (findUser.testNeeded && props.stageLevel > 0)
+      throw errors.STAGE_LEVEL_INCORRECT;
+
+    if (!findUser.testNeeded && props.stageLevel < 1)
+      throw errors.STAGE_LEVEL_INCORRECT;
+
     let stageId = generateRandomId();
     let seriesArray = getSeriesArray(findUser._id, stageId, props.stageLevel);
 

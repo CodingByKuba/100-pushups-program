@@ -25,6 +25,10 @@ const accountSchema = new mongoose.Schema(
     seriesLock: {
       type: Date,
     },
+    testNeeded: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

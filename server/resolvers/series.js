@@ -60,11 +60,12 @@ const finishSeries = async (props) => {
     );
 
     let updatedStage = undefined;
-    if (
+    let filterSeries =
       findAllSeriesInStage.filter(
         (el) => el.seriesToMake.length !== el.seriesFinished.length
-      ).length === 1
-    ) {
+      ).length === 1;
+    let isTestNeeded = findStage.stageLevel && filterSeries > 0 ? true : false;
+    if (filterSeries) {
       updatedStage = await models.Stage.updateOne(
         { accountId: findUser._id, stageId: findSeries.dedicatedForStage },
         { finished: true },
@@ -72,7 +73,7 @@ const finishSeries = async (props) => {
       );
       await models.Account.updateOne(
         { email: email },
-        { currentStage: "" },
+        { currentStage: "", testNeeded: isTestNeeded },
         { new: true }
       );
     }
@@ -83,6 +84,7 @@ const finishSeries = async (props) => {
         series: props.seriesFinished,
       },
       finishedStage: updatedStage ? findStage.stageId : undefined,
+      testNeeded: isTestNeeded,
     };
   } catch (error) {
     return { error: error };
