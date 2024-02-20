@@ -18,4 +18,8 @@ accountRouter.post(routes.TOKEN, verifyAuthToken, async (req, res) => {
   res.send(await resolvers.account.refreshToken(req.body));
 });
 
+accountRouter.put(routes.ACCOUNT, verifyAuthToken, async (req, res) => {
+  res.send(await resolvers.account.updateAccount(req.body));
+});
+
 module.exports = accountRouter;

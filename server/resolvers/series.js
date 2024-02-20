@@ -1,6 +1,6 @@
 const models = require("../models");
 const errors = require("../data/errors");
-const { countStageUnlocked } = require("../data/utils");
+const { countStageUnlocked, countBreakInDays } = require("../data/utils");
 
 const finishSeries = async (props) => {
   try {
@@ -10,6 +10,9 @@ const finishSeries = async (props) => {
 
     let findUser = await models.Account.findOne({ email: email });
     if (!findUser) throw errors.EMAIL_NOT_FOUND;
+
+    if (findUser.seriesLock && new Date(findUser.seriesLock) - new Date() > 0)
+      throw errors.SERIES_LOCK_DATE_INCORRECT;
 
     if (!props.seriesId) throw errors.SERIES_ID_REQUIRED;
 
@@ -75,6 +78,18 @@ const finishSeries = async (props) => {
         ? countNewStage
         : undefined;
 
+    let countNewBreakInDays = countBreakInDays(findSeries.breakInDays);
+
+    if (countBreakInDays) {
+      await models.Account.updateOne(
+        { email: email },
+        {
+          seriesLock: countNewBreakInDays,
+        },
+        { new: true }
+      );
+    }
+
     if (filterSeries) {
       updatedStage = await models.Stage.updateOne(
         { accountId: findUser._id, stageId: findSeries.dedicatedForStage },
@@ -102,6 +117,7 @@ const finishSeries = async (props) => {
       finishedStage: updatedStage ? findStage.stageId : undefined,
       testNeeded: isTestNeeded,
       stageUnlocked: newStageUnlocked,
+      seriesLock: countNewBreakInDays,
     };
   } catch (error) {
     return { error: error };

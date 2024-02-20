@@ -35,8 +35,19 @@ const countStageUnlocked = (pushups) => {
   return newStage;
 };
 
+const countBreakInDays = (breakInDays) => {
+  if (isNaN(breakInDays) || breakInDays < 0) return undefined;
+  let date = new Date();
+  date.setDate(date.getDate() + 1 + breakInDays);
+  date.setHours(0);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  return date;
+};
+
 module.exports = {
   generateRandomId,
   getSeriesArray,
   countStageUnlocked,
+  countBreakInDays,
 };

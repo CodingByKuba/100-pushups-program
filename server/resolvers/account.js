@@ -19,21 +19,22 @@ const signIn = async (props) => {
       findUser.password
     );
 
-    if (comparedPassword) {
-      let accessToken = jwt.sign(
-        { email: props.email },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "1d",
-        }
-      );
+    if (!comparedPassword) throw errors.PASSWORD_INCORRECT;
 
-      return {
-        token: accessToken,
-      };
-    } else {
-      throw errors.PASSWORD_INCORRECT;
-    }
+    let lastLogin = new Date();
+
+    let accessToken = jwt.sign({ email: props.email }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    await models.Account.updateOne(
+      { email: findUser.email },
+      { lastLogin: lastLogin }
+    );
+
+    return {
+      token: accessToken,
+    };
   } catch (error) {
     return { error: error };
   }
@@ -86,8 +87,38 @@ const refreshToken = async (props) => {
   }
 };
 
+const updateAccount = async (props) => {
+  const email = props.user.email;
+
+  try {
+    if (props.password || props.newPassword || props.repeatNewPassword) {
+      if (!props.password) throw errors.PASSWORD_REQUIRED;
+      if (!props.newPassword) throw errors.NEW_PASSWORD_REQUIRED;
+      if (!props.repeatNewPassword) throw errors.REPEAT_PASSWORD_REQUIRED;
+      if (props.password.length < 8) throw errors.PASSWORD_INCORRECT;
+      if (props.newPassword !== props.repeatNewPassword)
+        throw errors.REPEAT_PASSWORD_INCORRECT;
+      if (props.password === props.newPassword)
+        throw errors.NEW_PASSWORD_SAME_AS_OLD;
+
+      let hashedPassword = await bcrypt.hash(props.password, 10);
+
+      let updatedAccount = await models.Account.findOneAndUpdate(
+        { email: email },
+        { password: hashedPassword },
+        { new: true }
+      );
+
+      return { updatedPassword: updatedAccount ? true : false };
+    }
+  } catch (error) {
+    return { error: error };
+  }
+};
+
 module.exports = {
   signIn,
   createAccount,
   refreshToken,
+  updateAccount,
 };

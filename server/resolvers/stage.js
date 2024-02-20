@@ -11,6 +11,9 @@ const createStage = async (props) => {
     let findUser = await models.Account.findOne({ email: email });
     if (!findUser) throw errors.EMAIL_NOT_FOUND;
 
+    if (findUser.seriesLock && new Date(findUser.seriesLock) - new Date() > 0)
+      throw errors.SERIES_LOCK_DATE_INCORRECT;
+
     if (findUser.currentStage) throw errors.STAGE_STARTED;
     if (!props?.stageLevel || props.stageLevel < 0 || isNaN(props.stageLevel))
       props.stageLevel = 0;
