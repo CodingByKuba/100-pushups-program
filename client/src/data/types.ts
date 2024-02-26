@@ -56,3 +56,17 @@ export type ActionType = {
   type: number;
   payload: any;
 };
+
+export type FetchContextType = {
+  isPending: boolean;
+  fetchCallback: (data?: any) => void;
+};
+
+export type FetchCallbackArguments = {
+  url: string;
+  method: string;
+  timeout: number;
+  payload: any;
+  successCallback: (arg: any) => void;
+  errorCallback: (arg: any) => void;
+};

@@ -15,3 +15,11 @@ export enum TrainingReducerActions {
   DELETE_STAGE,
   FINISH_SERIES,
 }
+
+export enum LocalStorageMemory {
+  AUTH_TOKEN = "app-auth-token",
+  EMAIL = "app-email",
+  PASSWORD = "app-password",
+  PASSWORD_REMEMBER = "app-password-remember",
+  AUTO_LOGIN = "app-auto-login",
+}
