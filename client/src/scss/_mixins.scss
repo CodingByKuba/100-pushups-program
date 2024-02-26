@@ -22,3 +22,21 @@
   width: 100%;
   @include flexDisplay($justify: flex-start);
 }
+
+@mixin rootDiv {
+  height: 100vh;
+  width: 100%;
+  @include flexDisplay($justify: flex-start);
+}
+
+@mixin main {
+  @include flexDisplay($justify: flex-start);
+  flex: 1;
+}
+
+@mixin bottomNavigation {
+  width: 100%;
+  #bottom-navigation-bar {
+    background-color: $bottomNavBarBackground;
+  }
+}

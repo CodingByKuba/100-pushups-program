@@ -12,3 +12,15 @@
 body {
   @include body;
 }
+
+#root {
+  @include rootDiv;
+}
+
+main {
+  @include main;
+}
+
+#bottom-navigation {
+  @include bottomNavigation;
+}
