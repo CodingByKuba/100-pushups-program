@@ -8,8 +8,6 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: $rootFontSize;
-  color: $rootFontColor;
-  background: $rootBackgroundColor;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -36,7 +34,15 @@
 
 @mixin bottomNavigation {
   width: 100%;
-  #bottom-navigation-bar {
-    background-color: $bottomNavBarBackground;
+}
+
+@mixin loginForm {
+  @include flexDisplay($gap: 1rem);
+  padding: 3rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 1.3rem;
+  box-shadow: 0.5rem 0.5rem 1rem black;
+  div {
+    width: 100%;
   }
 }

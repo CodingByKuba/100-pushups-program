@@ -6,8 +6,6 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: calc(8px + 1vmin);
-  color: rgba(255, 255, 255, 0.87);
-  background: #242424;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -44,6 +42,29 @@ main {
 #bottom-navigation {
   width: 100%;
 }
-#bottom-navigation #bottom-navigation-bar {
-  background-color: #464646;
+
+#login-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-direction: column;
+  padding: 3rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 1.3rem;
+  box-shadow: 0.5rem 0.5rem 1rem black;
+}
+#login-form div {
+  width: 100%;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
 }/*# sourceMappingURL=index.css.map */

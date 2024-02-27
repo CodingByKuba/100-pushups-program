@@ -1,0 +1,7 @@
+.center {
+  @include flexDisplay;
+}
+
+.flex-1 {
+  flex: 1;
+}

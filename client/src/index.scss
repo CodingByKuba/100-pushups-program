@@ -24,3 +24,9 @@ main {
 #bottom-navigation {
   @include bottomNavigation;
 }
+
+#login-form {
+  @include loginForm;
+}
+
+@import "./scss/class";
