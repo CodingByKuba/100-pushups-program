@@ -44,9 +44,12 @@ const createAccount = async (props) => {
   try {
     if (!props?.email) throw errors.EMAIL_REQUIRED;
     if (!props?.password) throw errors.PASSWORD_REQUIRED;
+    if (!props?.repeatPassword) throw errors.REPEAT_PASSWORD_REQUIRED;
     if (!props.email.includes("@") || !props.email.includes("."))
       throw errors.EMAIL_INCORRECT;
     if (props.password.length < 8) throw errors.PASSWORD_INCORRECT;
+    if (props.password !== props.repeatPassword)
+      throw errors.REPEAT_PASSWORD_INCORRECT;
 
     let findEmail = await models.Account.find({ email: props.email });
     if (findEmail.length > 0) throw errors.EMAIL_EXISTS;

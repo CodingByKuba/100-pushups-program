@@ -12,7 +12,6 @@ const Register = () => {
 
   const handleRegister = (e: any) => {
     e.preventDefault();
-    console.log();
     fetchCallback({
       url: "/account",
       payload: {
@@ -30,19 +29,19 @@ const Register = () => {
       <form id="login-form" onSubmit={handleRegister}>
         <span>Create new account</span>
         <TextField
-          ref={emailRef}
+          inputRef={emailRef}
           type="email"
           label="E-mail..."
           variant="outlined"
         />
         <TextField
-          ref={passwordRef}
+          inputRef={passwordRef}
           type="password"
           label="Password..."
           variant="outlined"
         />
         <TextField
-          ref={repeatPasswordRef}
+          inputRef={repeatPasswordRef}
           type="password"
           label="Repeat password..."
           variant="outlined"
