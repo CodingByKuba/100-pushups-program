@@ -23,3 +23,11 @@ export enum LocalStorageMemory {
   PASSWORD_REMEMBER = "app-password-remember",
   AUTO_LOGIN = "app-auto-login",
 }
+
+export enum BrowserRoutes {
+  START = "/",
+  LOGIN = "/login",
+  REGISTER = "/register",
+  ACCOUNT = "/account",
+  ANY = "*",
+}

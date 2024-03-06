@@ -4,16 +4,17 @@ import Start from "../pages/Start";
 import BottomNavBar from "./BottomNavBar";
 import Login from "./start/Login";
 import Register from "./start/Register";
+import { BrowserRoutes } from "../data/enums";
 
 const RoutesManager = () => {
   return (
     <BrowserRouter>
       <main>
         <Routes>
-          <Route path="/" element={<Start />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="*" element={<NavigateOnError />} />
+          <Route path={BrowserRoutes.START} element={<Start />} />
+          <Route path={BrowserRoutes.LOGIN} element={<Login />} />
+          <Route path={BrowserRoutes.REGISTER} element={<Register />} />
+          <Route path={BrowserRoutes.ANY} element={<NavigateOnError />} />
         </Routes>
       </main>
       <BottomNavBar />
