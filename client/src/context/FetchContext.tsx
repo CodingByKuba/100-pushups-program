@@ -2,6 +2,7 @@ import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import config from "../data/config";
 import { FetchContextType, FetchCallbackArguments } from "../data/types";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 type PropsType = {
   children?: React.ReactNode;
@@ -45,6 +46,9 @@ export const FetchContextProvider = ({ children }: PropsType) => {
       }}
     >
       {children}
+      <Backdrop sx={{ zIndex: 9999 }} open={isPending}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </FetchContext.Provider>
   );
 };

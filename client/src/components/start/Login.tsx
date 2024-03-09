@@ -1,38 +1,88 @@
 import { Button, Checkbox, TextField } from "@mui/material";
 import { useUserContext } from "../../context/UserContext";
 import CenterFlexBox from "../CenterFlexBox";
+import { useFetchContext } from "../../context/FetchContext";
+import { useRef } from "react";
 
 const Login = () => {
   const {
-    memoryLogin,
+    memoryEmail,
     memoryPassword,
-    memoryRememberPassword,
+    memoryPasswordRemember,
     memoryAutoLogin,
+    setMemoryEmail,
+    setMemoryPassword,
+    setMemoryPasswordRemember,
+    setMemoryAutoLogin,
   } = useUserContext();
+  const { isPending, fetchCallback } = useFetchContext();
+
+  const emailRef: React.MutableRefObject<any> = useRef(null);
+  const passwordRef: React.MutableRefObject<any> = useRef(null);
+
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+    fetchCallback({
+      url: "/login",
+      payload: {
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      },
+      successCallback: (response: any) => console.log(response),
+      errorCallback: (error: any) => console.log(error),
+    });
+  };
 
   return (
     <CenterFlexBox>
-      <form id="login-form">
+      <form id="login-form" onSubmit={handleLogin}>
         <span>Sign in to your account</span>
         <TextField
           type="email"
           label="E-mail..."
+          inputRef={emailRef}
           variant="outlined"
-          defaultValue={memoryRememberPassword ? memoryLogin || "" : ""}
+          defaultValue={memoryPasswordRemember ? memoryEmail || "" : ""}
+          onChange={(e) => {
+            if (memoryPasswordRemember) setMemoryEmail(e.target.value);
+          }}
         />
         <TextField
           type="password"
           label="Password..."
+          inputRef={passwordRef}
           variant="outlined"
-          defaultValue={memoryRememberPassword ? memoryPassword || "" : ""}
+          defaultValue={memoryPasswordRemember ? memoryPassword || "" : ""}
+          onChange={(e) => {
+            if (memoryPasswordRemember) setMemoryPassword(e.target.value);
+          }}
         />
         <div>
-          <Checkbox checked={memoryRememberPassword || false} /> Remember me
+          <Checkbox
+            checked={memoryPasswordRemember || false}
+            onChange={(e) => {
+              setMemoryPasswordRemember(e.target.checked);
+              setMemoryEmail(e.target.checked ? emailRef.current.value : "");
+              setMemoryPassword(
+                e.target.checked ? passwordRef.current.value : ""
+              );
+              if (!e.target.checked) setMemoryAutoLogin(false);
+            }}
+          />{" "}
+          Remember me
         </div>
         <div>
-          <Checkbox checked={memoryAutoLogin || false} /> Auto login
+          <Checkbox
+            checked={memoryAutoLogin || false}
+            onChange={(e) => {
+              setMemoryAutoLogin(e.target.checked);
+            }}
+          />{" "}
+          Auto login
         </div>
-        <Button variant="contained">Sign In</Button>
+        <Button variant="contained" type="submit" disabled={isPending}>
+          Sign In
+        </Button>
       </form>
     </CenterFlexBox>
   );

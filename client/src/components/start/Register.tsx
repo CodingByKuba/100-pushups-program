@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useFetchContext } from "../../context/FetchContext";
 
 const Register = () => {
-  const { fetchCallback } = useFetchContext();
+  const { isPending, fetchCallback } = useFetchContext();
 
   const emailRef: React.MutableRefObject<any> = useRef(null);
   const passwordRef: React.MutableRefObject<any> = useRef(null);
@@ -46,7 +46,7 @@ const Register = () => {
           label="Repeat password..."
           variant="outlined"
         />
-        <Button variant="contained" type="submit">
+        <Button variant="contained" type="submit" disabled={isPending}>
           Sign Up
         </Button>
       </form>
