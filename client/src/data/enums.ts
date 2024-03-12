@@ -4,6 +4,7 @@ export enum UserReducerActions {
   SET_LAST_LOGIN,
   SET_CREATED_AT,
   SET_UPDATED_AT,
+  RESET,
 }
 
 export enum TrainingReducerActions {

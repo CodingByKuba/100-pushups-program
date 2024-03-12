@@ -3,6 +3,7 @@ import { FetchContextProvider } from "./context/FetchContext";
 import { UserContextProvider } from "./context/UserContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { BrowserRouter } from "react-router-dom";
 
 const darkTheme = createTheme({
   palette: {
@@ -16,7 +17,9 @@ const App = () => {
       <FetchContextProvider>
         <ThemeProvider theme={darkTheme}>
           <CssBaseline />
-          <RoutesManager />
+          <BrowserRouter>
+            <RoutesManager />
+          </BrowserRouter>
         </ThemeProvider>
       </FetchContextProvider>
     </UserContextProvider>

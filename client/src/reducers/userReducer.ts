@@ -32,6 +32,8 @@ const userReducer = (
         ...state,
         updatedAt: (action.payload as Date) ? action.payload : undefined,
       };
+    case UserReducerActions.RESET:
+      return userInitialState;
     default:
       return state;
   }

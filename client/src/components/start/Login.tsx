@@ -3,6 +3,7 @@ import { useUserContext } from "../../context/UserContext";
 import CenterFlexBox from "../CenterFlexBox";
 import { useFetchContext } from "../../context/FetchContext";
 import { useRef } from "react";
+import { UserReducerActions } from "../../data/enums";
 
 const Login = () => {
   const {
@@ -14,6 +15,8 @@ const Login = () => {
     setMemoryPassword,
     setMemoryPasswordRemember,
     setMemoryAutoLogin,
+    setMemoryAuthToken,
+    userDispatch,
   } = useUserContext();
   const { isPending, fetchCallback } = useFetchContext();
 
@@ -28,7 +31,16 @@ const Login = () => {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       },
-      successCallback: (response: any) => console.log(response),
+      successCallback: (response: any) => {
+        if (response.data.error) return console.log(response.data.error);
+        if (response.data.token) {
+          setMemoryAuthToken(response.data.token);
+          userDispatch({
+            type: UserReducerActions.SET_AUTH_TOKEN,
+            payload: response.data.token,
+          });
+        }
+      },
       errorCallback: (error: any) => console.log(error),
     });
   };
