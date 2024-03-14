@@ -22,4 +22,8 @@ accountRouter.put(routes.ACCOUNT, verifyAuthToken, async (req, res) => {
   res.send(await resolvers.account.updateAccount(req.body));
 });
 
+accountRouter.put(routes.LOGIN, verifyAuthToken, async (req, res) => {
+  res.send(await resolvers.account.signOut(req.body));
+});
+
 module.exports = accountRouter;

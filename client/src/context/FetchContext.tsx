@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import config from "../data/config";
 import { FetchContextType, FetchCallbackArguments } from "../data/types";
 import { Backdrop, CircularProgress } from "@mui/material";
+import { useUserContext } from "./UserContext";
 
 type PropsType = {
   children?: React.ReactNode;
@@ -16,6 +17,7 @@ const defaultValue: FetchContextType = {
 const FetchContext = createContext(defaultValue);
 
 export const FetchContextProvider = ({ children }: PropsType) => {
+  const { userState } = useUserContext();
   const [isPending, setIsPending] = useState(false);
   const controller = new AbortController();
 
@@ -29,13 +31,23 @@ export const FetchContextProvider = ({ children }: PropsType) => {
       method: data.method || "POST",
       timeout: data.timeout || config.FETCH_TIMEOUT,
       data: data.payload || {},
+      headers: userState.authToken
+        ? {
+            Authorization: "Bearer " + userState.authToken,
+          }
+        : undefined,
       signal: controller.signal,
     })
       .then((response) => {
         data.successCallback(response);
       })
       .catch((error) => data.errorCallback(error))
-      .finally(() => setIsPending(false));
+      .finally(() => {
+        if (data.finallyCallback) {
+          data.finallyCallback();
+        }
+        setIsPending(false);
+      });
   };
 
   return (

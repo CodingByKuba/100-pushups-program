@@ -69,4 +69,5 @@ export type FetchCallbackArguments = {
   payload: any;
   successCallback: (arg: any) => void;
   errorCallback: (arg: any) => void;
+  finallyCallback: () => void;
 };

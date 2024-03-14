@@ -8,8 +8,8 @@ import Account from "../pages/Account";
 import NavigateOnError from "./NavigateOnError";
 import Start from "../pages/Start";
 import BottomNavBar from "./BottomNavBar";
-import Login from "./start/Login";
-import Register from "./start/Register";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 const RoutesManager = () => {
   const { userState, userDispatch, memoryAuthToken } = useUserContext();

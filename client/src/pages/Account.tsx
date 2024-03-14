@@ -1,13 +1,32 @@
 import { Button } from "@mui/material";
 import { useUserContext } from "../context/UserContext";
-import { UserReducerActions } from "../data/enums";
+import { AxiosRoutes, UserReducerActions } from "../data/enums";
+import { useFetchContext } from "../context/FetchContext";
 
 const Account = () => {
-  const { userDispatch, setMemoryAuthToken } = useUserContext();
+  const { userState, userDispatch, setMemoryAuthToken, setMemoryAutoLogin } =
+    useUserContext();
+  const { fetchCallback } = useFetchContext();
 
   const handleLogout = () => {
-    setMemoryAuthToken("");
-    userDispatch({ type: UserReducerActions.RESET });
+    fetchCallback({
+      url: AxiosRoutes.LOGIN,
+      method: "PUT",
+      payload: {
+        token: userState.authToken,
+      },
+      successCallback: (response: any) => {
+        console.log(response);
+      },
+      errorCallback: (error: any) => {
+        console.log(error);
+      },
+      finallyCallback: () => {
+        setMemoryAutoLogin(false);
+        setMemoryAuthToken("");
+        userDispatch({ type: UserReducerActions.RESET });
+      },
+    });
   };
 
   return (

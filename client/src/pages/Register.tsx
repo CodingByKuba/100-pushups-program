@@ -1,7 +1,8 @@
 import { Button, TextField } from "@mui/material";
-import CenterFlexBox from "../CenterFlexBox";
+import CenterFlexBox from "../components/CenterFlexBox";
 import { useRef } from "react";
-import { useFetchContext } from "../../context/FetchContext";
+import { useFetchContext } from "../context/FetchContext";
+import { AxiosRoutes } from "../data/enums";
 
 const Register = () => {
   const { isPending, fetchCallback } = useFetchContext();
@@ -13,7 +14,7 @@ const Register = () => {
   const handleRegister = (e: any) => {
     e.preventDefault();
     fetchCallback({
-      url: "/account",
+      url: AxiosRoutes.ACCOUNT,
       payload: {
         email: emailRef.current.value,
         password: passwordRef.current.value,

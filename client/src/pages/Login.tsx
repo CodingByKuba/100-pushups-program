@@ -1,9 +1,9 @@
 import { Button, Checkbox, TextField } from "@mui/material";
-import { useUserContext } from "../../context/UserContext";
-import CenterFlexBox from "../CenterFlexBox";
-import { useFetchContext } from "../../context/FetchContext";
+import { useUserContext } from "../context/UserContext";
+import CenterFlexBox from "../components/CenterFlexBox";
+import { useFetchContext } from "../context/FetchContext";
 import { useRef } from "react";
-import { UserReducerActions } from "../../data/enums";
+import { AxiosRoutes, UserReducerActions } from "../data/enums";
 
 const Login = () => {
   const {
@@ -22,11 +22,12 @@ const Login = () => {
 
   const emailRef: React.MutableRefObject<any> = useRef(null);
   const passwordRef: React.MutableRefObject<any> = useRef(null);
+  const autoLoginRef: React.MutableRefObject<any> = useRef(null);
 
   const handleLogin = (e: any) => {
     e.preventDefault();
     fetchCallback({
-      url: "/login",
+      url: AxiosRoutes.LOGIN,
       payload: {
         email: emailRef.current.value,
         password: passwordRef.current.value,
@@ -34,6 +35,9 @@ const Login = () => {
       successCallback: (response: any) => {
         if (response.data.error) return console.log(response.data.error);
         if (response.data.token) {
+          if (autoLoginRef.current.checked) {
+            setMemoryAutoLogin(true);
+          }
           setMemoryAuthToken(response.data.token);
           userDispatch({
             type: UserReducerActions.SET_AUTH_TOKEN,
@@ -85,10 +89,8 @@ const Login = () => {
         </div>
         <div>
           <Checkbox
-            checked={memoryAutoLogin || false}
-            onChange={(e) => {
-              setMemoryAutoLogin(e.target.checked);
-            }}
+            defaultChecked={memoryAutoLogin || false}
+            inputRef={autoLoginRef}
           />{" "}
           Auto login
         </div>

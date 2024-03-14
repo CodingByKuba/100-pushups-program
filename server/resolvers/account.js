@@ -119,9 +119,22 @@ const updateAccount = async (props) => {
   }
 };
 
+const signOut = async (props) => {
+  try {
+    if (!props.token || typeof props.token !== "string")
+      throw errors.TOKEN_REQUIRED;
+    return await models.RevokedToken.create({
+      authToken: props.token,
+    });
+  } catch (error) {
+    return { error: error };
+  }
+};
+
 module.exports = {
   signIn,
   createAccount,
   refreshToken,
   updateAccount,
+  signOut,
 };

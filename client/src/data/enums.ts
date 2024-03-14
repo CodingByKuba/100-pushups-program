@@ -25,6 +25,11 @@ export enum LocalStorageMemory {
   AUTO_LOGIN = "app-auto-login",
 }
 
+export enum AxiosRoutes {
+  LOGIN = "/login",
+  ACCOUNT = "/account",
+}
+
 export enum BrowserRoutes {
   START = "/",
   LOGIN = "/login",
