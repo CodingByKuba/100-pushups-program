@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import { useUserContext } from "../context/UserContext";
 import { AxiosRoutes, UserReducerActions } from "../data/enums";
 import { useFetchContext } from "../context/FetchContext";
+import { useEffect } from "react";
 
 const Account = () => {
   const { userState, userDispatch, setMemoryAuthToken, setMemoryAutoLogin } =
@@ -28,6 +29,18 @@ const Account = () => {
       },
     });
   };
+
+  useEffect(() => {
+    fetchCallback({
+      url: AxiosRoutes.ACCOUNT,
+      method: "GET",
+      successCallback: (response: any) => {
+        if (response.data.error) return console.log(response.data.error);
+        console.log(response.data);
+      },
+      errorCallback: (error: any) => console.log(error),
+    });
+  }, []);
 
   return (
     <div>
