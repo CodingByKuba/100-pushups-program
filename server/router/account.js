@@ -14,6 +14,18 @@ accountRouter.post(routes.LOGIN, async (req, res) => {
   res.send(await resolvers.account.signIn(req.body));
 });
 
+accountRouter.get(routes.ACCOUNT, verifyAuthToken, async (req, res) => {
+  let user = await resolvers.account.getUser(req.body);
+  let stages = await resolvers.stage.getStages(req.body);
+  let series = await resolvers.series.getSeries(req.body);
+
+  res.send({
+    user: user,
+    stages: stages,
+    series: series,
+  });
+});
+
 accountRouter.post(routes.TOKEN, verifyAuthToken, async (req, res) => {
   res.send(await resolvers.account.refreshToken(req.body));
 });

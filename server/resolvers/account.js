@@ -23,9 +23,13 @@ const signIn = async (props) => {
 
     let lastLogin = new Date();
 
-    let accessToken = jwt.sign({ email: props.email }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    let accessToken = jwt.sign(
+      { email: props.email },
+      process.env.JWT_SECRET || "secret",
+      {
+        expiresIn: "1d",
+      }
+    );
 
     await models.Account.updateOne(
       { email: findUser.email },
@@ -65,6 +69,9 @@ const createAccount = async (props) => {
     return { error: error };
   }
 };
+
+const getUser = async (props) =>
+  await models.Account.findOne({ email: props.user.email });
 
 const refreshToken = async (props) => {
   try {
@@ -134,6 +141,7 @@ const signOut = async (props) => {
 module.exports = {
   signIn,
   createAccount,
+  getUser,
   refreshToken,
   updateAccount,
   signOut,

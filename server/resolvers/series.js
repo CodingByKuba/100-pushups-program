@@ -2,6 +2,21 @@ const models = require("../models");
 const errors = require("../data/errors");
 const { countStageUnlocked, countBreakInDays } = require("../data/utils");
 
+const getSeries = async (props) => {
+  try {
+    let email = props.user.email;
+
+    if (!email) throw errors.EMAIL_REQUIRED;
+
+    let findUser = await models.Account.findOne({ email: email });
+    if (!findUser) throw errors.EMAIL_NOT_FOUND;
+
+    return await models.Series.find({ accountId: findUser._id });
+  } catch (error) {
+    return { error: error };
+  }
+};
+
 const finishSeries = async (props) => {
   try {
     let email = props.user.email;
@@ -125,5 +140,6 @@ const finishSeries = async (props) => {
 };
 
 module.exports = {
+  getSeries,
   finishSeries,
 };
